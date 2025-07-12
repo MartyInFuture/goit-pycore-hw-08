@@ -1,7 +1,8 @@
 from entities.address_book import AddressBook
+import pickle
 
 def main():
-    book = AddressBook()
+    book = load_data()
     print("Welcome to the assistant bot!")
 
     commands = {
@@ -39,6 +40,7 @@ def main():
 
         if command in ["close", "exit"]:
             print("Good bye!")
+            save_data(book)
             break
 
         elif command == "hello":
@@ -51,6 +53,17 @@ def main():
 
         else:
             print("Invalid command.")
+
+def save_data(book, filename='address_book.pkl'):
+    with open(filename, 'wb') as file:
+        pickle.dump(book, file)
+
+def load_data(filename='address_book.pkl'):
+    try:
+        with open(filename, 'rb') as file:
+            return pickle.load(file)
+    except FileNotFoundError:
+        return AddressBook()
 
 def parse_input(user_input):
     parts = user_input.strip().split()
